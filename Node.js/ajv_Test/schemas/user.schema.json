@@ -1,6 +1,6 @@
 {
-    "$schema": "Schema",
-    "$id": "id",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "user.schema.json",
     "type": "object",
     "title": "ejercicio2",
     "description": "None",
@@ -21,7 +21,6 @@
         "homeTown": {
             "type": "string",
             "description": "homeTown",
-            "example": "Metro City",
             "maxLength": 100,
             "minLength": 1
         },
@@ -70,9 +69,6 @@
                 }
             }
         }
-    },
-    "optionalProperties": {
-        "author": {"type": "string"}
     },
     "$defs": {
         "power": {
