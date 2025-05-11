@@ -1,0 +1,86 @@
+{
+    "$schema": "Schema",
+    "$id": "id",
+    "type": "object",
+    "title": "ejercicio2",
+    "description": "None",
+    "required": [
+        "squadName",
+        "homeTown",
+        "formed",
+        "secretBase",
+        "active",
+        "members"
+    ],
+    "properties": {
+        "squadName": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+        },
+        "homeTown": {
+            "type": "string",
+            "description": "homeTown",
+            "example": "Metro City",
+            "maxLength": 100,
+            "minLength": 1
+        },
+        "formed": {
+            "type": "integer",
+            "description": "formed",
+            "minimum": 2000,
+            "maximum": 2025
+        },
+        "secretBase": {
+            "type": "string",
+            "description": "secretBase"
+        },
+        "active": {
+            "type": "boolean"
+        },
+        "members": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "age",
+                    "secretIdentity",
+                    "powers"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "age": {
+                        "type": "integer"
+                    },
+                    "secretIdentity": {
+                        "type": "string"
+                    },
+                    "powers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/$defs/power"
+                        },
+                        "minItems": 1
+                    }
+                }
+            }
+        }
+    },
+    "$defs": {
+        "power": {
+            "type": "string",
+            "enum": [
+            "Radiation resistance",
+            "Turning tiny",
+            "Radiation blast",
+            "Million tonne punch",
+            "Damage resistance"
+            ]
+        }
+    }
+}

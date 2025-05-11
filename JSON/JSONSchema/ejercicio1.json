@@ -1,0 +1,10 @@
+{
+    "name": "Pintura",
+    "artist": "Artista máximo 50 letras",
+    "dimension": {
+        "width": 10.2,
+        "height": 1.1
+    }, 
+    "description": null,
+    "tags": ["oil", "oil", "watercolor", "digital", "famous"]
+}
