@@ -1,0 +1,630 @@
+openapi: 3.0.3
+info:
+  title: Race & Lap API
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /races:
+    get:
+      operationId: racesGET
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_races_get_200_response'
+          description: List of races
+      summary: Get all races
+      x-eov-operation-handler: controllers/DefaultController
+  /race:
+    post:
+      operationId: racePOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Race'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponse'
+          description: Race created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request
+      summary: Create a race
+      x-eov-operation-handler: controllers/DefaultController
+  /race/{id_race}:
+    delete:
+      operationId: raceIdRaceDELETE
+      parameters:
+      - explode: false
+        in: path
+        name: id_race
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: Race deleted
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Not Found
+      summary: Delete a race
+      x-eov-operation-handler: controllers/DefaultController
+    get:
+      operationId: raceIdRaceGET
+      parameters:
+      - explode: false
+        in: path
+        name: id_race
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Race'
+          description: Race data
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Not Found
+      summary: Get a race by ID
+      x-eov-operation-handler: controllers/DefaultController
+    put:
+      operationId: raceIdRacePUT
+      parameters:
+      - explode: false
+        in: path
+        name: id_race
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Race'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: Race updated
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Not Found
+      summary: Update a race
+      x-eov-operation-handler: controllers/DefaultController
+  /drivers:
+    get:
+      operationId: driversGET
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_drivers_get_200_response'
+          description: List of driver URIs
+      summary: Get all drivers (URIs)
+      x-eov-operation-handler: controllers/DefaultController
+  /drivers/{id_race}:
+    get:
+      operationId: driversIdRaceGET
+      parameters:
+      - explode: false
+        in: path
+        name: id_race
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - description: Filter by driver code
+        explode: true
+        in: query
+        name: driverCode
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Filter by team name
+        explode: true
+        in: query
+        name: team
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_drivers__id_race__get_200_response'
+          description: List of drivers
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Not Found
+      summary: Get all drivers in a race (with optional filters)
+      x-eov-operation-handler: controllers/DefaultController
+  /driver/{id_driver}:
+    delete:
+      operationId: driverIdDriverDELETE
+      parameters:
+      - explode: false
+        in: path
+        name: id_driver
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: Driver deleted
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Not Found
+      summary: Delete a driver
+      x-eov-operation-handler: controllers/DefaultController
+    get:
+      operationId: driverIdDriverGET
+      parameters:
+      - explode: false
+        in: path
+        name: id_driver
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Driver'
+          description: Driver found
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Not Found
+      summary: Get driver by ID
+      x-eov-operation-handler: controllers/DefaultController
+    post:
+      operationId: driverIdDriverPOST
+      parameters:
+      - explode: false
+        in: path
+        name: id_driver
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Driver'
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponse'
+          description: Driver created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Conflict
+      summary: Add a driver
+      x-eov-operation-handler: controllers/DefaultController
+    put:
+      operationId: driverIdDriverPUT
+      parameters:
+      - explode: false
+        in: path
+        name: id_driver
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Driver'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: Driver updated
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad Request
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Not Found
+      summary: Update a driver
+      x-eov-operation-handler: controllers/DefaultController
+  /race/{id_race}/laps:
+    get:
+      operationId: raceIdRaceLapsGET
+      parameters:
+      - explode: false
+        in: path
+        name: id_race
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_race__id_race__laps_get_200_response'
+          description: List of laps
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Not Found
+      summary: Get all laps of a race
+      x-eov-operation-handler: controllers/DefaultController
+  /race/{id_race}/lap/{lap_number}:
+    get:
+      operationId: raceIdRaceLapLapNumberGET
+      parameters:
+      - explode: false
+        in: path
+        name: id_race
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: false
+        in: path
+        name: lap_number
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - description: Filter by driver code
+        explode: true
+        in: query
+        name: driverCode
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_race__id_race__lap__lap_number__get_200_response'
+          description: Lap information
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Not Found
+      summary: Get a lap from a race (with optional filter by driver)
+      x-eov-operation-handler: controllers/DefaultController
+components:
+  parameters:
+    RaceId:
+      explode: false
+      in: path
+      name: id_race
+      required: true
+      schema:
+        type: integer
+      style: simple
+    DriverId:
+      explode: false
+      in: path
+      name: id_driver
+      required: true
+      schema:
+        type: integer
+      style: simple
+  responses:
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Not Found
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Bad Request
+    Conflict:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Conflict
+  schemas:
+    Race:
+      example:
+        raceType: raceType
+        season: 0
+        raceName: raceName
+      properties:
+        season:
+          type: integer
+        raceName:
+          type: string
+        raceType:
+          type: string
+      required:
+      - raceName
+      - raceType
+      - season
+      type: object
+    Driver:
+      example:
+        driverNumber: 0
+        code: code
+        nationality: nationality
+        team: team
+      properties:
+        driverNumber:
+          type: integer
+        code:
+          type: string
+        team:
+          type: string
+        nationality:
+          type: string
+      required:
+      - code
+      - team
+      type: object
+    Lap:
+      example:
+        sector2Time: sector2Time
+        finishingPosition: 1
+        finalStatus: finalStatus
+        isPersonalBest: true
+        pitStopDuration: pitStopDuration
+        pitInTime: pitInTime
+        lapNumber: 0
+        compound: compound
+        driverCode: driverCode
+        lapTime: lapTime
+        sector1Time: sector1Time
+        gridPosition: 5
+        pitOutTime: pitOutTime
+        position: 6
+        sector3Time: sector3Time
+      properties:
+        lapNumber:
+          type: integer
+        driverCode:
+          type: string
+        position:
+          type: integer
+        lapTime:
+          type: string
+        isPersonalBest:
+          type: boolean
+        sector1Time:
+          type: string
+        sector2Time:
+          type: string
+        sector3Time:
+          type: string
+        compound:
+          type: string
+        pitInTime:
+          type: string
+        pitOutTime:
+          type: string
+        pitStopDuration:
+          type: string
+        finishingPosition:
+          type: integer
+        gridPosition:
+          type: integer
+        finalStatus:
+          type: string
+      required:
+      - driverCode
+      - lapNumber
+      type: object
+    Message:
+      example:
+        message: message
+      properties:
+        message:
+          type: string
+      type: object
+    Error:
+      example:
+        error: error
+      properties:
+        error:
+          type: string
+      type: object
+    CreatedResponse:
+      example:
+        id: 0
+        message: message
+      properties:
+        message:
+          type: string
+        id:
+          type: integer
+      type: object
+    _races_get_200_response:
+      example:
+        races:
+        - raceType: raceType
+          season: 0
+          raceName: raceName
+        - raceType: raceType
+          season: 0
+          raceName: raceName
+      properties:
+        races:
+          items:
+            $ref: '#/components/schemas/Race'
+          type: array
+      type: object
+    _drivers_get_200_response:
+      example:
+        drivers:
+        - drivers
+        - drivers
+      properties:
+        drivers:
+          items:
+            type: string
+          type: array
+      type: object
+    _drivers__id_race__get_200_response:
+      example:
+        drivers:
+        - driverNumber: 0
+          code: code
+          nationality: nationality
+          team: team
+        - driverNumber: 0
+          code: code
+          nationality: nationality
+          team: team
+      properties:
+        drivers:
+          items:
+            $ref: '#/components/schemas/Driver'
+          type: array
+      type: object
+    _race__id_race__laps_get_200_response:
+      example:
+        laps:
+        - sector2Time: sector2Time
+          finishingPosition: 1
+          finalStatus: finalStatus
+          isPersonalBest: true
+          pitStopDuration: pitStopDuration
+          pitInTime: pitInTime
+          lapNumber: 0
+          compound: compound
+          driverCode: driverCode
+          lapTime: lapTime
+          sector1Time: sector1Time
+          gridPosition: 5
+          pitOutTime: pitOutTime
+          position: 6
+          sector3Time: sector3Time
+        - sector2Time: sector2Time
+          finishingPosition: 1
+          finalStatus: finalStatus
+          isPersonalBest: true
+          pitStopDuration: pitStopDuration
+          pitInTime: pitInTime
+          lapNumber: 0
+          compound: compound
+          driverCode: driverCode
+          lapTime: lapTime
+          sector1Time: sector1Time
+          gridPosition: 5
+          pitOutTime: pitOutTime
+          position: 6
+          sector3Time: sector3Time
+      properties:
+        laps:
+          items:
+            $ref: '#/components/schemas/Lap'
+          type: array
+      type: object
+    _race__id_race__lap__lap_number__get_200_response:
+      example:
+        times:
+          sector2Time: sector2Time
+          finishingPosition: 1
+          finalStatus: finalStatus
+          isPersonalBest: true
+          pitStopDuration: pitStopDuration
+          pitInTime: pitInTime
+          lapNumber: 0
+          compound: compound
+          driverCode: driverCode
+          lapTime: lapTime
+          sector1Time: sector1Time
+          gridPosition: 5
+          pitOutTime: pitOutTime
+          position: 6
+          sector3Time: sector3Time
+        lap_number: 0
+      properties:
+        lap_number:
+          type: integer
+        times:
+          $ref: '#/components/schemas/Lap'
+      type: object

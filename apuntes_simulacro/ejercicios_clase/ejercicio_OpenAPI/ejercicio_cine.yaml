@@ -1,0 +1,472 @@
+openapi: 3.0.0
+info:
+  title: Cine OpenAPI document
+  version: 0.0.1
+  description: Cine OpenAPI document
+paths: 
+  /sesiones:
+    get:
+      summary: Get sesiones
+      description: Devuelve una lista de sesiones.
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/sesion"
+        "400":
+          description: "ERROR"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Crear sesion
+      description: Crea una sesion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/sesion"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/sesion"
+        "400":
+          description: "El JSON no es valido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: "Error de autorizacion"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Errores de permisos"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /sesiones/{id}:
+    get:
+      summary: Get sesion
+      description: Devuelve la info de una sesion
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la sesión a obtener
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/sesion"
+        "400":
+          description: "ERROR"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      summary: Actualizar sesion
+      description: Actualizar una sesion
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la sesión a actualizar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/sesion"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/sesion"
+        "400":
+          description: "JSNO no correcto"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: "Error de autorizacion"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Error de permisos"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: "ID no valido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      summary: Eliminar sesion
+      description: Elimina una sesion
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la sesión a eliminar
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/sesion"
+        "400":
+          description: "JSON no correcto"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: "Error de autorizacion"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Error de permisos"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: "ID no valido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"                                 
+
+  /sesiones/{id}/reservar:
+    post:
+      summary: Reservar para una sesion
+      description: Reservar para una sesion
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la sesión a reservar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                numeroEntradas:
+                  type: integer
+                  minimum: 1
+                asientos:
+                  type: array
+                  items:
+                    type: string
+                    pattern: "^[A-Z]{1}[1-9][0-9]?$"  
+                    example: "A10"                    
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/entrada"
+        "400":
+          description: "JSNO no correcto"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: "Error de autorizacion"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: "Error de permisos"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: "ID no valido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /peliculas:
+    get:
+      summary: Listado de peliculas
+      description: Devuelve una lista de las peliculas disponibles.
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/pelicula"
+        "400":
+          description: "ERROR"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      summary: Crear una película
+      description: Crea una nueva película
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/pelicula"
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/pelicula"
+        "400":
+          description: "JSON no válido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /peliculas/{id}:
+    get:
+      summary: Información de una película
+      description: Devuelve la información de una película
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la película
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/pelicula"
+        "400":
+          description: "ERROR"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      summary: Modificar una película
+      description: Modificar la información de una película
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la película
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/pelicula"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/pelicula"
+        "400":
+          description: "JSON no válido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: "ID no válido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      summary: Borrar una película
+      description: Eliminar una película por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la película
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/pelicula"
+        "400":
+          description: "JSON no válido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: "ID no válido"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /peliculas/{id}/sesiones:
+    get:
+      summary: Obtener sesiones de una película
+      description: Devuelve las sesiones de una película concreta.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la película
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/sesion"
+        "400":
+          description: "ERROR"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        
+components:
+  schemas:
+    sesion:
+      type: object
+      properties:
+        id:
+          type: integer
+        fechaHorario:
+          type: string
+          format: date-time
+        sala:
+          type: string
+          pattern: "^[1-9]\\.[1-9][0-9]?$"
+          example: "3.12"
+        pelicula:
+          $ref: "#/components/schemas/pelicula"
+        version:
+          type: string
+          pattern: "^[1-9][0-9]?\\.[1-9][0-9]?\\.[1-9][0-9]?$"
+          example: "10.3.25"
+        formato:
+          type: string
+          enum:
+          - 3D
+          - 4D
+          - 2D
+        asientosDisponibles:
+          type: integer
+          minimum: 0
+        apadatada:
+          type: boolean
+        precio:
+          type: number
+          minimum: 0
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+          example: "Error en la solicitud"
+    entrada:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: El identificador único de la entrada
+        asiento:
+          type: string
+          pattern: "^[A-Z]{1}[1-9][0-9]?$"
+          example: "A10"
+          description: El asiento asignado en la sesión de cine
+        sesion:
+          $ref: "#/components/schemas/sesion"
+      required:
+        - id
+        - asiento
+        - sesion
+    pelicula:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: El identificador de la película
+        titulo:
+          type: string
+          description: El título de la película
+        duracion:
+          type: integer
+          description: La duración de la película en minutos
+        clasificacion:
+          type: string
+          description: La clasificación de la película (por ejemplo, "A", "B", etc.)
+      required:
+        - id
+        - titulo
+        - duracion
+
+                
+      
+  

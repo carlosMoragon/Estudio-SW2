@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <div>
+      <button id="mercedes_coche">POST DE MERCEDES PARA /coche</button>
+      <button id="suzuki_coche">POST DE SUZUKI PARA /coche</button>
+      <button id="mercedes_moto">POST DE MERCEDES PARA /moto</button>
+      <button id="suzuki_moto">POST DE SUZUKI PARA /moto</button>
+    </div>
+
+    <script>
+      document.getElementById('mercedes_coche').addEventListener('click', () => {
+        
+        fetch('/ejemplos/mercedes.json')
+          .then(response => response.json())
+          .then(datos => {
+            console.log("Datos que se envían a /coche:", datos); 
+
+            return fetch('/coche', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(datos)  
+            });
+          })
+          .then(response => {
+            if (response.ok) {
+              return response.json();  
+            }
+            throw new Error('Error al enviar los datos');
+          })
+          .then(data => {
+            console.log('Respuesta del servidor:', data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+
+      document.getElementById('suzuki_coche').addEventListener('click', () => {
+        fetch('/ejemplos/suzuki.json')
+          .then(response => response.json()) 
+          .then(datos => {
+            return fetch('/coche', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(datos)
+            });
+          })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Error al enviar los datos');
+          })
+          .then(data => {
+            console.log('Respuesta del servidor:', data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+
+      document.getElementById('mercedes_moto').addEventListener('click', () => {
+        
+        fetch('/ejemplos/mercedes.json')
+          .then(response => response.json())  
+          .then(datos => {
+            return fetch('/moto', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(datos)
+            });
+          })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Error al enviar los datos');
+          })
+          .then(data => {
+            console.log('Respuesta del servidor:', data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+
+      document.getElementById('suzuki_moto').addEventListener('click', () => {
+        
+        fetch('/ejemplos/suzuki.json')
+          .then(response => response.json())  
+          .then(datos => {
+            return fetch('/moto', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(datos)
+            });
+          })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Error al enviar los datos');
+          })
+          .then(data => {
+            console.log('Respuesta del servidor:', data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+    </script>
+  </body>
+</html>

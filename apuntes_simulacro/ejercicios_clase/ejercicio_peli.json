@@ -1,0 +1,25 @@
+{
+    "title": "Inception",
+    "year": 2010,
+    "director": "Christopher Nolan",
+    "genres": ["Action", "Sci-Fi", "Thriller"],
+    "duration": 148,
+    "rating": {
+        "imdb": 8.8,
+        "rottenTomatoes": 87
+    },
+    "cast": [
+        {
+            "name": "Leonardo DiCaprio",
+            "role": "Dom Cobb"
+        },
+        {
+            "name": "Joseph Gordon-Levitt",
+            "role": "Arthur"
+        }
+    ],
+    "boxOffice": {
+        "budget": 160000000,
+        "revenue": 836800000
+    }
+}

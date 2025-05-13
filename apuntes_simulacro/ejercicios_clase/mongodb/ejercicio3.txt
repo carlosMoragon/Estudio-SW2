@@ -1,0 +1,19 @@
+1. En sample_airbnb.listingsAndReviews, ¿qué "room types" existen?
+    $ use sample_airbnb
+    $ db.listingsAndReviews.findOne()
+    $ db.listingsAndReviews.distinct("room_type") -> [ 'Entire home/apt', 'Private room', 'Shared room' ]
+
+2. En sample_training.companies, haga una query que devuelva el nombre y el año en el que se fundaron las 5 compañías más antiguas.
+    $ use sample_training
+    $ db.companies.find({ founded_year: { $ne: null } }, { name: 1, founded_year: 1, _id: 0 }).sort({ founded_year: 1 }).limit(5)
+ -> [
+        { name: 'Alstrasoft', founded_year: 1800 },
+        { name: 'US Army', founded_year: 1800 },
+        { name: 'DuPont', founded_year: 1802 },
+        { name: 'Bachmann Industries', founded_year: 1833 },
+        { name: 'Bertelsmann', founded_year: 1835 }
+    ]
+
+3. En sample_training.trips, ¿en qué año nació el ciclista más joven? (sol. 1999)
+    $ db.trips.aggregate([{$match: {'birth year': { $ne: null, $ne: '' }}},{$addFields: {birthYearNum: { $toInt: '$birth year' }}},{$group: {_id: null,maxBirthYear: { $max: '$birthYearNum' }}}])
+ -> [ { _id: null, maxBirthYear: 1999 } ]

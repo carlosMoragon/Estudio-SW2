@@ -1,0 +1,45 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema#",
+    "$id": "http://example.com/schemas/movie.schema.json",
+    "type": "object",
+    "required": ["title", "year", "director", "genres", "duration", "rating", "cast", "boxOffice"],
+    "properties": {
+        "title": { "type": "string" },
+        "year": { "type": "integer", "minimum": 1888 },
+        "director": { "type": "string" },
+        "genres": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+        },
+        "duration": { "type": "integer", "minimum": 1 },
+        "rating": {
+            "type": "object",
+            "required": ["imdb", "rottenTomatoes"],
+            "properties": {
+                "imdb": { "type": "number", "minimum": 0, "maximum": 10 },
+                "rottenTomatoes": { "type": "integer", "minimum": 0, "maximum": 100 }
+            }
+        },
+        "cast": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["name", "role"],
+                "properties": {
+                    "name": { "type": "string" },
+                    "role": { "type": "string" }
+                }
+            },
+            "minItems": 1
+        },
+        "boxOffice": {
+            "type": "object",
+            "required": ["budget", "revenue"],
+            "properties": {
+                "budget": { "type": "integer", "minimum": 0 },
+                "revenue": { "type": "integer", "minimum": 0 }
+            }
+        }
+    }
+}

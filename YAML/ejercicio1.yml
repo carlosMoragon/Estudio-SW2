@@ -1,0 +1,58 @@
+openapi: 3.0.1
+info:
+  title: Practica
+  version: 0.0.1
+  description: Practica para el simulacro de examen
+paths: 
+  /multiply:
+    get:
+      summary: Index
+      description: Info General
+      parameters:
+        - in: query
+          name: numbers
+          schema:
+            type: array
+            items:
+              type: integer
+              minimum: 0
+              maximum: 100
+            minItems: 2
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+        "400":
+          description: No OK
+          content:
+            application/json:
+              schema:
+                type: string
+    post:
+      summary: Index
+      description: Info General
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              minimum: 0
+              maximum: 100
+      responses:
+        "200":
+          description: No OK
+          content:
+            application/json:
+              schema:
+                type: integer
+        "400":
+          description: No OK
+          content:
+            application/json:
+              schema:
+                type: string
+                
+      

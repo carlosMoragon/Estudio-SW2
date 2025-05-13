@@ -1,0 +1,40 @@
+<!-- Enunciado: -->
+<!DOCTYPE TVSCHEDULE [
+    <!ELEMENT TVSCHEDULE (CHANNEL+)>
+    <!ELEMENT CHANNEL (BANNER,DAY+)>
+    <!ELEMENT BANNER (#PCDATA)>
+    <!ELEMENT DAY (DATE,(HOLIDAY|PROGRAMSLOT+)+)>
+    <!ELEMENT HOLIDAY (#PCDATA)>
+    <!ELEMENT DATE (#PCDATA)>
+    <!ELEMENT PROGRAMSLOT (TIME,TITLE,DESCRIPTION?)>
+    <!ELEMENT TIME (#PCDATA)>
+    <!ELEMENT TITLE (#PCDATA)>
+    <!ELEMENT DESCRIPTION (#PCDATA)>
+    <!ATTLIST TVSCHEDULE NAME CDATA #REQUIRED>
+    <!ATTLIST CHANNEL CHAN CDATA #REQUIRED>
+    <!ATTLIST PROGRAMSLOT VTR CDATA #IMPLIED>
+    <!ATTLIST TITLE RATING CDATA #IMPLIED
+    <!ATTLIST TITLE LANGUAGE CDATA #IMPLIED>
+]>
+<!-- Solución -->
+<TVSCHEDULE NAME="name">
+    <CHANNEL CHAN="chan">
+        <BANNER>Banner</BANNER> 
+        <DAY>
+            <DATE>date</DATE>
+            <PROGRAMSLOT>
+                <TIME>time</TIME>
+                <TITLE RATING="rating" >title</TITLE>
+                <DESCRIPTION>description</DESCRIPTION>
+            </PROGRAMSLOT>
+            <PROGRAMSLOT>
+                <TIME>time</TIME>
+                <TITLE LANGUAGE="language">title</TITLE>
+            </PROGRAMSLOT>
+        </DAY>
+        <DAY>
+            <DATE>date2</DATE>
+            <HOLIDAY>Holiday</HOLIDAY>
+        </DAY>
+    </CHANNEL>
+</TVSCHEDULE>

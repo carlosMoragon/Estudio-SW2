@@ -1,0 +1,25 @@
+<!-- Enunciado -->
+<articles>
+    <article id="x34675">
+        <name>Apache Spark Architecture</name>
+        <month>december</month>
+        <author name="kay vennisla"/>
+        <reviews lang=""/>
+        <feedback > high rating</feedback>
+        <reviews lang="de">The best content with diagrams</reviews>
+    </article>
+</articles>
+
+<!-- Solución -->
+<!DOCTYPE articles [
+    <!ELEMENT articles (article+)>
+    <!ELEMENT article (name,month, author, reviews+, feedback)>
+    <!ATTLIST article id CDATA #REQUIRED>
+    <!ELEMENT name (#PCDATA)>
+    <!ELEMENT month (#PCDATA)>
+    <!ELEMENT feedback (#PCDATA)>
+    <!ELEMENT reviews (#PCDATA)>
+    <!ELEMENT author EMPTY>
+    <!ATTLIST author name CDATA #REQUIRED>
+    <!ATTLIST reviews lang CDATA #REQUIRED>
+]>

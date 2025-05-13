@@ -1,0 +1,29 @@
+{
+    "$id": "coche.schema.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Coche",
+    "type": "object",
+    "required": ["marca", "velocidad_maxima", "edad", "puertas"],
+    "additionalProperties": false,
+    "properties": {
+        "marca": {
+            "type": "string",
+            "description": "Nombre de la marca"
+        },
+        "velocidad_maxima": {
+            "type": "number",
+            "description": "Velocidad máxima que puede ir el coche",
+            "minimum": 0
+        },
+        "edad": {
+            "type": "integer",
+            "description": "Edad que tiene el coche (Años que lleva en circulación)",
+            "minimum": 0
+        },
+        "puertas": {
+            "type": "integer",
+            "enum": [3, 5],
+            "description": "Número de puertas que tiene el coche (Ojo, se cuenta el maletero)"
+        }
+    } 
+}
