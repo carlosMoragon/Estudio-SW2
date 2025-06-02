@@ -1,0 +1,32 @@
+1. En sample_training.zips ¿Cuántas colecciones tienen menos de 1000 personas en el campo pop? (sol. 8065)
+    $ use sample_training
+    $ db.zips.findOne()
+    $ db.zips.countDocuments({ pop: { $lt: 1000 } }) -> 8065
+    $ db.zips.find({ pop: { $lt: 1000 } }).count() -> 8065
+
+2. En sample_training.trips ¿Cuál es la diferencia entre la gente que nació en 1998 y la que nació después de 1998? (sol. 6)
+    $ db.trips.findOne()
+    $ const born1998 = db.trips.countDocuments({ "birth year": 1998 })
+    $ const bornAfter1998 = db.trips.countDocuments({ "birth year": { $gt: 1998 } })
+    $ print(born1998 - bornAfter1998) -> 6
+    $ Math.abs(db.trips.countDocuments({ "birth year": 1998 }) - db.trips.countDocuments({ "birth year": { $gt: 1998 } })) -> 6
+
+3. En sample_training.routes ¿Cuántas rutas tienen al menos una parada? (sol. 11)
+    $ db.routes.countDocuments({ stops: { $gte: 1 } }) -> 11
+
+4. En sample_training.inspections ¿Cuántos negocios tienen un resultado de inspección "Out of Business" y pertenecen al sector "Home Improvement Contractor -100"? (sol. 4)
+    $ db.inspections.countDocuments({ 
+        result: "Out of Business", 
+        sector: "Home Improvement Contractor - 100" 
+    }) -> 4
+
+5. En sample_training.inspections ¿Cuántos documentos hay con fecha de inspección "Feb 20 2015" o "Feb 21 2015" y cuyo sector no sea "Cigarette Retail Dealer - 127"? (sol. 204)
+    $ db.inspections.countDocuments({ 
+        date: { $in: ["Feb 20 2015", "Feb 21 2015"] },
+        sector: { $ne: "Cigarette Retail Dealer - 127" }
+    }) -> 204
+    
+    $ db.inspections.countDocuments({ 
+        date: { $in: ["Feb 20 2015", "Feb 21 2015"] },
+        sector: { $ne: "Cigarette Retail Dealer - 127" }
+    }) -> 204

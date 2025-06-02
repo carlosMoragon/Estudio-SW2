@@ -1,0 +1,476 @@
+1. En sample_training.zips ¿Cuántas colecciones tienen menos de 1000 personas en el campo pop? (sol. 8065)
+    $ use sample_training
+    $ db.zips.findOne()
+    $ db.zips.countDocuments({ pop: { $lt: 1000 } }) -> 8065
+    $ db.zips.find({ pop: { $lt: 1000 } }).count() -> 8065
+
+2. En sample_training.trips ¿Cuál es la diferencia entre la gente que nació en 1998 y la que nació después de 1998? (sol. 6)
+    $ db.trips.findOne()
+    $ const born1998 = db.trips.countDocuments({ "birth year": 1998 })
+    $ const bornAfter1998 = db.trips.countDocuments({ "birth year": { $gt: 1998 } })
+    $ print(born1998 - bornAfter1998) -> 6
+    $ Math.abs(db.trips.countDocuments({ "birth year": 1998 }) - db.trips.countDocuments({ "birth year": { $gt: 1998 } })) -> 6
+
+3. En sample_training.routes ¿Cuántas rutas tienen al menos una parada? (sol. 11)
+    $ db.routes.countDocuments({ stops: { $gte: 1 } }) -> 11
+
+4. En sample_training.inspections ¿Cuántos negocios tienen un resultado de inspección "Out of Business" y pertenecen al sector "Home Improvement Contractor -100"? (sol. 4)
+    $ db.inspections.countDocuments({ 
+        result: "Out of Business", 
+        sector: "Home Improvement Contractor - 100" 
+    }) -> 4
+
+5. En sample_training.inspections ¿Cuántos documentos hay con fecha de inspección "Feb 20 2015" o "Feb 21 2015" y cuyo sector no sea "Cigarette Retail Dealer - 127"? (sol. 204)
+    $ db.inspections.countDocuments({ 
+        date: { $in: ["Feb 20 2015", "Feb 21 2015"] },
+        sector: { $ne: "Cigarette Retail Dealer - 127" }
+    }) -> 204
+    
+    $ db.inspections.countDocuments({ 
+        date: { $in: ["Feb 20 2015", "Feb 21 2015"] },
+        sector: { $ne: "Cigarette Retail Dealer - 127" }
+    }) -> 204
+
+------------------------------------------------
+1. En sample_training.companies, ¿cuántas empresas tienen más empleados que el año en el que se fundaron? (sol. 324)
+    $ use sample_training
+    $ db.companies.find({$expr: { $gt: ["$number_of_employees", "$founded_year"] }}).count() -> 324
+
+2. En sample_training.companies, ¿en cuántas empresas coinciden su permalink con su twitter_username? (sol. 1299)
+    $ db.companies.find({$expr: { $eq: ["$permalink", "$twitter_username"] }}).count() -> 1299
+
+3. En sample_airbnb.listingsAndReviews, ¿cuál es el nombre del alojamiento en el que pueden estar más de 6 personas alojadas y tiene exactamente 50 reviews? (sol. Sunset Beach Lodge Retreat)
+    $ use sample_airbnb
+    $ db.listingsAndReviews.findOne({ accommodates: { $gt: 6 }, number_of_reviews: 50 },{ name: 1 }) -> { _id: '4294289', name: 'Sunset Beach Lodge Retreat' }
+
+4. En sample_airbnb.listingsAndReviews, ¿cuántos documentos tienen el "property_type" "House" e incluyen "Changing table" como una de las "amenities"? (sol. 11)
+    $ db.listingsAndReviews.find({property_type: "House", amenities: "Changing table"}).count() -> 11
+
+5. En sample_training.companies, ¿Cuántas empresas tienen oficinas en Seattle? (sol. 117)
+    $ use sample_training
+    $ db.companies.find({"offices.city": "Seattle"}).count() -> 117
+
+6. En sample_training.companies, haga una query que devuelva únicamente el nombre de las empresas que tengan exactamente 8 "funding_rounds" 
+    $ db.companies.find({ funding_rounds: { $size: 8 } }, { name: 1, _id: 0 }) -> 
+[
+  { name: 'Twitter' },
+  { name: 'LinkedIn' },
+  { name: 'PayScale' },
+  { name: 'Xobni' },
+  { name: 'Zynga' },
+  { name: 'ShareThis' },
+  { name: 'TicketLeap' },
+  { name: 'Moblyng' },
+  { name: 'PlumChoice' },
+  { name: 'SolFocus' },
+  { name: 'HyperWeek' },
+  { name: 'Virident Systems' },
+  { name: 'Extreme Enterprises' },
+  { name: 'CipherMax' },
+  { name: 'Stemgent' },
+  { name: 'Sonos' },
+  { name: 'BridgeLux' },
+  { name: 'Silicor Materials' },
+  { name: '1366 Technologies' },
+  { name: 'Biolex Therapeutics' }
+]
+
+7. En sample_training.trips, ¿cuántos viajes empiezan en estaciones que están al oeste de la longitud -74? (sol. 1928)
+Nota 1: Hacia el oeste la longitud decrece
+Nota 2: el formato es <field_name>: [ <longitud>, <latitud> ]
+
+    $ db.trips.find({"start station location.coordinates.0": { $lt: -74 }}).count() -> 1928
+
+8. En sample_training.inspections, ¿cuántas inspecciones se llevaron a cabo en la ciudad de "NEW YORK"? (sol. 18279)
+    $ db.inspections.find({"address.city": "NEW YORK"}).count() -> 18279
+
+9. En sample_airbnb.listingsAndReviews, haga una query que devuelva el nombre y la dirección de los alojamientos que tengan "Internet" como primer elemento de "amenities"
+
+    $ db.listingsAndReviews.find({ amenities: { $elemMatch: { $eq: "Internet" } }, $expr: { $eq: [ { $arrayElemAt: ["$amenities", 0] }, "Internet" ] }}, { name: 1, address: 1, _id: 0 }) -> 
+[
+  {
+    name: 'Private Room in Bushwick',
+    address: {
+      street: 'Brooklyn, NY, United States',
+      suburb: 'Brooklyn',
+      government_area: 'Bushwick',
+      market: 'New York',
+      country: 'United States',
+      country_code: 'US',
+      location: {
+        type: 'Point',
+        coordinates: [ -73.93615, 40.69791 ],
+        is_location_exact: true
+      }
+    }
+  },
+  {
+    name: 'Nice room in Barcelona Center',
+    address: {
+      street: 'Barcelona, Catalunya, Spain',
+      suburb: 'Eixample',
+      government_area: "la Dreta de l'Eixample",
+      market: 'Barcelona',
+      country: 'Spain',
+      country_code: 'ES',
+      location: {
+        type: 'Point',
+        coordinates: [ 2.16942, 41.40082 ],
+        is_location_exact: true
+      }
+    }
+  },
+  {
+    name: 'Modern Spacious 1 Bedroom Loft',
+    address: {
+      street: 'Montréal, Québec, Canada',
+      suburb: 'Mile End',
+      government_area: 'Le Plateau-Mont-Royal',
+      market: 'Montreal',
+      country: 'Canada',
+      country_code: 'CA',
+      location: {
+        type: 'Point',
+        coordinates: [ -73.59111, 45.51889 ],
+        is_location_exact: true
+      }
+    }
+  },
+  {
+    name: '3 chambres au coeur du Plateau',
+    address: {
+      street: 'Montréal, Québec, Canada',
+      suburb: 'Le Plateau-Mont-Royal',
+      government_area: 'Le Plateau-Mont-Royal',
+      market: 'Montreal',
+      country: 'Canada',
+      country_code: 'CA',
+      location: {
+        type: 'Point',
+        coordinates: [ -73.57383, 45.52233 ],
+        is_location_exact: true
+      }
+    }
+  },
+  {
+    name: 'New York City - Upper West Side Apt',
+    address: {
+      street: 'New York, NY, United States',
+      suburb: 'Manhattan',
+      government_area: 'Upper West Side',
+      market: 'New York',
+      country: 'United States',
+      country_code: 'US',
+      location: {
+        type: 'Point',
+        coordinates: [ -73.96523, 40.79962 ],
+        is_location_exact: false
+      }
+    }
+  },
+  {
+    name: 'Double and triple rooms Blue mosque',
+    address: {
+      street: 'Fatih , İstanbul, Turkey',
+      suburb: 'Fatih',
+      government_area: 'Fatih',
+      market: 'Istanbul',
+      country: 'Turkey',
+      country_code: 'TR',
+      location: {
+        type: 'Point',
+        coordinates: [ 28.98009, 41.0062 ],
+        is_location_exact: false
+      }
+    }
+  },
+  {
+    name: 'Friendly Apartment, 10m from Manly',
+    address: {
+      street: 'Fairlight, NSW, Australia',
+      suburb: 'Fairlight',
+      government_area: 'Manly',
+      market: 'Sydney',
+      country: 'Australia',
+      country_code: 'AU',
+      location: {
+        type: 'Point',
+        coordinates: [ 151.26969, -33.79629 ],
+        is_location_exact: false
+      }
+    }
+  },
+  {
+    name: 'Quarto inteiro na Tijuca',
+    address: {
+      street: 'Rio de Janeiro, Rio de Janeiro, Brazil',
+      suburb: 'Tijuca',
+      government_area: 'Tijuca',
+      market: 'Rio De Janeiro',
+      country: 'Brazil',
+      country_code: 'BR',
+      location: {
+        type: 'Point',
+        coordinates: [ -43.247421907135774, -22.936203246553816 ],
+        is_location_exact: false
+      }
+    }
+  },
+  {
+    name: 'Room Close to LGA and 35 mins to Times Square',
+    address: {
+      street: 'Queens, NY, United States',
+      suburb: 'Queens',
+      government_area: 'Jackson Heights',
+      market: 'New York',
+      country: 'United States',
+      country_code: 'US',
+      location: {
+        type: 'Point',
+        coordinates: [ -73.88025, 40.74953 ],
+        is_location_exact: true
+      }
+    }
+  },
+  {
+    name: '',
+    address: {
+      street: 'Istanbul, İstanbul, Turkey',
+      suburb: 'Beşiktaş',
+      government_area: 'Sariyer',
+      market: 'Istanbul',
+      country: 'Turkey',
+      country_code: 'TR',
+      location: {
+        type: 'Point',
+        coordinates: [ 29.05108, 41.08835 ],
+        is_location_exact: false
+      }
+    }
+  },
+  {
+    name: '~Ao Lele~ Flying Cloud',
+    address: {
+      street: 'Volcano, HI, United States',
+      suburb: 'Island of Hawaiʻi',
+      government_area: 'Puna',
+      market: 'The Big Island',
+      country: 'United States',
+      country_code: 'US',
+      location: {
+        type: 'Point',
+        coordinates: [ -155.21763, 19.42151 ],
+        is_location_exact: false
+      }
+    }
+  },
+  {
+    name: 'Cozy House in Ortaköy',
+    address: {
+      street: 'Beşiktaş, İstanbul, Turkey',
+      suburb: 'Beşiktaş',
+      government_area: 'Besiktas',
+      market: 'Istanbul',
+      country: 'Turkey',
+      country_code: 'TR',
+      location: {
+        type: 'Point',
+        coordinates: [ 29.02519, 41.05197 ],
+        is_location_exact: true
+      }
+    }
+  },
+  {
+    name: 'Kadiköy, Moda, close to transports',
+    address: {
+      street: 'Kadıköy, İstanbul, Turkey',
+      suburb: 'Kadıköy',
+      government_area: 'Kadikoy',
+      market: 'Istanbul',
+      country: 'Turkey',
+      country_code: 'TR',
+      location: {
+        type: 'Point',
+        coordinates: [ 29.02588, 40.98825 ],
+        is_location_exact: true
+      }
+    }
+  },
+  {
+    name: 'Great location in Barcelona',
+    address: {
+      street: 'Barcelona, Catalunya, Spain',
+      suburb: 'Sant Martí',
+      government_area: 'el Clot',
+      market: 'Barcelona',
+      country: 'Spain',
+      country_code: 'ES',
+      location: {
+        type: 'Point',
+        coordinates: [ 2.19057, 41.41254 ],
+        is_location_exact: true
+      }
+    }
+  },
+  {
+    name: 'Ribeira Smart Flat',
+    address: {
+      street: 'Porto, Porto, Portugal',
+      suburb: '',
+      government_area: 'Cedofeita, Ildefonso, Sé, Miragaia, Nicolau, Vitória',
+      market: 'Porto',
+      country: 'Portugal',
+      country_code: 'PT',
+      location: {
+        type: 'Point',
+        coordinates: [ -8.61602, 41.14295 ],
+        is_location_exact: false
+      }
+    }
+  },
+  {
+    name: "Designer's Historical Apartment",
+    address: {
+      street: 'Istanbul, Istanbul Province, Turkey',
+      suburb: 'Beyoglu',
+      government_area: 'Beyoglu',
+      market: 'Istanbul',
+      country: 'Turkey',
+      country_code: 'TR',
+      location: {
+        type: 'Point',
+        coordinates: [ 28.97994, 41.03406 ],
+        is_location_exact: false
+      }
+    }
+  },
+  {
+    name: 'well lit East Williamsburg apt.',
+    address: {
+      street: 'Brooklyn, NY, United States',
+      suburb: 'Brooklyn',
+      government_area: 'Williamsburg',
+      market: 'New York',
+      country: 'United States',
+      country_code: 'US',
+      location: {
+        type: 'Point',
+        coordinates: [ -73.94384, 40.70528 ],
+        is_location_exact: true
+      }
+    }
+  },
+  {
+    name: 'Room in the very ♥ of BCN - Unbeatable location',
+    address: {
+      street: 'Barcelona, Catalunya, Spain',
+      suburb: 'El Gòtic',
+      government_area: 'el Barri Gòtic',
+      market: 'Barcelona',
+      country: 'Spain',
+      country_code: 'ES',
+      location: {
+        type: 'Point',
+        coordinates: [ 2.17778, 41.38049 ],
+        is_location_exact: true
+      }
+    }
+  },
+  {
+    name: 'Private Cozy Bedroom in Brooklyn',
+    address: {
+      street: 'Brooklyn, NY, United States',
+      suburb: 'Flatbush',
+      government_area: 'East Flatbush',
+      market: 'New York',
+      country: 'United States',
+      country_code: 'US',
+      location: {
+        type: 'Point',
+        coordinates: [ -73.94883, 40.6536 ],
+        is_location_exact: true
+      }
+    }
+  },
+  {
+    name: 'Sunny Bedroom in Downtown Montreal',
+    address: {
+      street: 'Montréal, Québec, Canada',
+      suburb: 'Downtown Montreal',
+      government_area: 'Ville-Marie',
+      market: 'Montreal',
+      country: 'Canada',
+      country_code: 'CA',
+      location: {
+        type: 'Point',
+        coordinates: [ -73.58595, 45.49039 ],
+        is_location_exact: true
+      }
+    }
+  }
+]
+------------------------------
+1. En sample_airbnb.listingsAndReviews, ¿qué "room types" existen?
+    $ use sample_airbnb
+    $ db.listingsAndReviews.findOne()
+    $ db.listingsAndReviews.distinct("room_type") -> [ 'Entire home/apt', 'Private room', 'Shared room' ]
+    $ db.listingsAndReviews.aggregate([{"$project": {"room_type":1, "_id":0}},{"$group": {"_id": "$room_type"}}]) -> [ 'Entire home/apt', 'Private room', 'Shared room' ]
+
+2. En sample_training.companies, haga una query que devuelva el nombre y el año en el que se fundaron las 5 compañías más antiguas.
+    $ use sample_training
+    $ db.companies.find({ founded_year: { $ne: null } }, { name: 1, founded_year: 1, _id: 0 }).sort({ founded_year: 1 }).limit(5)
+ -> [
+        { name: 'Alstrasoft', founded_year: 1800 },
+        { name: 'US Army', founded_year: 1800 },
+        { name: 'DuPont', founded_year: 1802 },
+        { name: 'Bachmann Industries', founded_year: 1833 },
+        { name: 'Bertelsmann', founded_year: 1835 }
+    ]
+
+    sample_training> db.companies.aggregate([{"$match":{founded_year: {'$ne': null}}},{"$project":{name: 1, founded_year: 1, _id: 0}}, {"$sort": {founded_year: 1}}, {"$limit": 5}])
+    [
+    { name: 'Alstrasoft', founded_year: 1800 },
+    { name: 'US Army', founded_year: 1800 },
+    { name: 'DuPont', founded_year: 1802 },
+    { name: 'Bachmann Industries', founded_year: 1833 },
+    { name: 'Bertelsmann', founded_year: 1835 }
+    ]
+
+3. En sample_training.trips, ¿en qué año nació el ciclista más joven? (sol. 1999)
+    $ db.trips.aggregate([{$match: {'birth year': { $ne: null, $ne: '' }}},{$addFields: {birthYearNum: { $toInt: '$birth year' }}},{$group: {_id: null,maxBirthYear: { $max: '$birthYearNum' }}}])
+ -> [ { _id: null, maxBirthYear: 1999 } ]
+
+-------------------------------
+## Apartado 1
+
+db.listingsAndReviews.aggregate([ { "$group": { "_id": "$name", "ReviewsDisponibles": { "$sum": {"$size": "$reviews" }}}}]).sort({"ReviewsDisponibles": -1})
+
+sw2> db.listingsAndReviews.aggregate([ { "$group": { "_id": "$name", "ReviewsDisponibles": { "$sum": {"$size": "$reviews" }}}}, {"$sort":{"ReviewsDisponibles": -1}}, {"$limit": 1}])
+
+db.listingsAndReviews.aggregate([
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      numReviews: { $size: "$reviews" }
+    }
+  },
+  { $sort: { numReviews: -1 } },
+  { $limit: 1 }
+])
+
+## Apartado 2
+
+sw2> db.listingsAndReviews.aggregate([ { "$group": { "_id": "$name", "AmenitiesDisponibles": { "$sum": {"$size": "$amenities" }}}}]).sort({"AmenitiesDisponibles": -1})
+
+sw2> db.listingsAndReviews.aggregate([ { "$group": { "_id": "$name", "AmenitiesDisponibles": { "$sum": {"$size": "$amenities" }}}}, {"$sort":{"AmenitiesDisponibles": -1}}, {"$limit": 1}])
+
+
+## Apartado 3
+
+sw2> db.listingsAndReviews.aggregate([ { "$group": { "_id": "$property_type", "totalAlojamientos": { "$sum": 1 } } }] )
+
+## Apartado 4
+
+sw2> db.listingsAndReviews.find({"$expr": {"$or": [{"$gte": ["$beds", 2]}, {"$lte": ["$beds", 5]}]}}).count()
+

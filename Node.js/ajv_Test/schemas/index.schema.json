@@ -1,6 +1,6 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema#",
-    "$id": "Schema",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "index.schema.json",
     "type": "object",
     "title": "Painting",
     "description": "Painting information",

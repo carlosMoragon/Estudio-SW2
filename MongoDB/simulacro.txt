@@ -1,0 +1,33 @@
+## Apartado 1
+
+db.listingsAndReviews.aggregate([ { "$group": { "_id": "$name", "ReviewsDisponibles": { "$sum": {"$size": "$reviews" }}}}]).sort({"ReviewsDisponibles": -1})
+
+sw2> db.listingsAndReviews.aggregate([ { "$group": { "_id": "$name", "ReviewsDisponibles": { "$sum": {"$size": "$reviews" }}}}, {"$sort":{"ReviewsDisponibles": -1}}, {"$limit": 1}])
+
+db.listingsAndReviews.aggregate([
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      numReviews: { $size: "$reviews" }
+    }
+  },
+  { $sort: { numReviews: -1 } },
+  { $limit: 1 }
+])
+
+## Apartado 2
+
+sw2> db.listingsAndReviews.aggregate([ { "$group": { "_id": "$name", "AmenitiesDisponibles": { "$sum": {"$size": "$amenities" }}}}]).sort({"AmenitiesDisponibles": -1})
+
+sw2> db.listingsAndReviews.aggregate([ { "$group": { "_id": "$name", "AmenitiesDisponibles": { "$sum": {"$size": "$amenities" }}}}, {"$sort":{"AmenitiesDisponibles": -1}}, {"$limit": 1}])
+
+
+## Apartado 3
+
+sw2> db.listingsAndReviews.aggregate([ { "$group": { "_id": "$property_type", "totalAlojamientos": { "$sum": 1 } } }] )
+
+## Apartado 4
+
+sw2> db.listingsAndReviews.find({"$expr": {"$or": [{"$gte": ["$beds", 2]}, {"$lte": ["$beds", 5]}]}}).count()
+

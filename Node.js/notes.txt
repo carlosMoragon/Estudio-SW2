@@ -1,1 +1,9 @@
 Para validar JSON: ajv
+
+npm init -y
+npm install -g express-generator
+npx express-generator -v ejs express_test
+cd express_test
+npm install
+npm audit fix <--force>
+npm start
