@@ -459,12 +459,15 @@ db.listingsAndReviews.aggregate([
   { $limit: 1 }
 ])
 
+OTRA OPCIÓN: db.listingsAndReviews.find({},{name: 1, number_of_reviews: 1}).sort({number_of_reviews: -1}).limit(1)
+
 ## Apartado 2
 
 sw2> db.listingsAndReviews.aggregate([ { "$group": { "_id": "$name", "AmenitiesDisponibles": { "$sum": {"$size": "$amenities" }}}}]).sort({"AmenitiesDisponibles": -1})
 
 sw2> db.listingsAndReviews.aggregate([ { "$group": { "_id": "$name", "AmenitiesDisponibles": { "$sum": {"$size": "$amenities" }}}}, {"$sort":{"AmenitiesDisponibles": -1}}, {"$limit": 1}])
 
+OTRA SOLUCIÓN: db.listingsAndReviews.aggregate([{"$project":{name:1, amenities_dispo: {"$size": "$amenities"}}}, {"$sort": {amenities_dispo: -1}}, {"$limit": 1}])
 
 ## Apartado 3
 
